@@ -16,3 +16,9 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('list', 'MovieRentalController@list');
+Route::get('edit/{id}', 'MovieRentalController@edit');
+Route::post('save', 'MovieRentalController@save');
+Route::put('update/{id}', 'MovieRentalController@update');
+Route::delete('delete/{id}', 'MovieRentalController@delete');
