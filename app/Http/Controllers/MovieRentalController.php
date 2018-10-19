@@ -4,47 +4,39 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Crypt;
+use App\Movie;
 
 class MovieRentalController extends Controller
 {
-	public function save(Request $in)
+	public function list()
 	{
-		if ($in->id) { //Edita
-			$movie = Movie::find(Crypt::decrypt($in->movie_id));
-		} else {
-			$movie = new Movie; //Cria novo
-		}
-		$movie->name = $in->name;
-		$movie->year = $in->year;
-		$movie->director = $in->director;
-		$movie->synopsis = $in->synopsis;
+		$movie = Movie::get(['name', 'year', 'director', 'synopsis', 'photo']);
 
-		$movie->save();
-
-		return response()->json(
-			'status' => 1,
+		return response()->json([
 			'movie' => $movie,
-		);
+		]);
 	}
 
 	public function edit(Request $in)
 	{
 		$movie = Movie::find(Crypt::decrypt($in->id));
 
-		return response()->json(
-			'status' => 1,
-			'movie' => $movie,
-		);
+		return response()->json(['movie' => $movie]);
 	}
 
-	public function list()
+	public function save(Request $in)
 	{
-		$movie = Movie::get(['name', 'year', 'director', 'synopsis']);
+		$movie = Movie::create($in->all());
 
-		return response()->json(
-			'status' => 1,
-			'movie' => $movie,
-		);
+		return response()->json(['movie' => $movie, 201]);
+	}
+
+	public function update(Request $in)
+	{
+		$movie = Movie::findOrFail(Crypt::decrypt($in->movie_id));
+		$movie->update($in->all());
+
+		return response()->json(['movie' => $movie, 200]);
 	}
 
 	public function delete(Request $in)
@@ -52,10 +44,7 @@ class MovieRentalController extends Controller
 		$movie = Movie::find(Crypt::decrypt($in->id));
 		$movie->delete();
 
-		return response()->json(
-			'status' => 1,
-			'message' => 'Filme deletado com sucesso',
-		);
+		return response()->json([null, 204]);
 	}
 
 }

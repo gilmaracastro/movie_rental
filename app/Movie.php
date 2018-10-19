@@ -11,5 +11,6 @@ class Movie extends Model
 		'year',
 		'director',
 		'synopsis',
+		'photo',
 	];
 }
