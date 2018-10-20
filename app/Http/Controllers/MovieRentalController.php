@@ -10,16 +10,16 @@ class MovieRentalController extends Controller
 {
 	public function list()
 	{
-		$movie = Movie::get(['name', 'year', 'director', 'synopsis', 'photo']);
+		$movies = Movie::get(['id', 'name', 'year', 'director', 'synopsis', 'photo']);
 
 		return response()->json([
-			'movie' => $movie,
+			'movies' => $movies,
 		]);
 	}
 
 	public function edit(Request $in)
 	{
-		$movie = Movie::find(Crypt::decrypt($in->id));
+		$movie = Movie::find($in->id);
 
 		return response()->json(['movie' => $movie]);
 	}
@@ -33,7 +33,7 @@ class MovieRentalController extends Controller
 
 	public function update(Request $in)
 	{
-		$movie = Movie::findOrFail(Crypt::decrypt($in->movie_id));
+		$movie = Movie::findOrFail($in->id);
 		$movie->update($in->all());
 
 		return response()->json(['movie' => $movie, 200]);
@@ -41,10 +41,17 @@ class MovieRentalController extends Controller
 
 	public function delete(Request $in)
 	{
-		$movie = Movie::find(Crypt::decrypt($in->id));
+		$movie = Movie::find($in->id);
 		$movie->delete();
 
 		return response()->json([null, 204]);
+	}
+
+	public function show(Request $in)
+	{
+		$movie = Movie::find($in->id);
+
+		return response()->json(['movie' => $movie]);
 	}
 
 }
