@@ -49029,8 +49029,9 @@ var render = function() {
       staticClass: "cover float-right",
       attrs: {
         src:
-          _vm.base64 ||
-          "https://static.allatvkanaler.se/images/tv-placeholder.png"
+          _vm.base64 && _vm.base64.trim().length > 0
+            ? _vm.base64
+            : "https://static.allatvkanaler.se/images/tv-placeholder.png"
       },
       on: { click: _vm.handleImageClick }
     }),
