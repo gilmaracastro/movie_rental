@@ -2,7 +2,7 @@
 	<div class="movie" @click="handleMovieClick">
 		<img
 			class="cover"
-			:src="cover"/>
+			:src="photo"/>
 		
 		<div class="title">
 			{{name}}
@@ -16,11 +16,10 @@
 <script>
     export default {
 		props: [
-			'id', 'name', 'year', 'director', 'synopsis', 'cover'
+			'id', 'name', 'year', 'director', 'synopsis', 'photo'
 		],
         methods: {
 			handleMovieClick() {
-				//Pq não o goTo aqui?
 				this.$emit('click', this.id);
 			}
 		}
