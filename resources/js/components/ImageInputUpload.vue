@@ -2,7 +2,7 @@
 	<div>
 		<img
 			class="cover float-right"
-			:src="base64 || 'https://static.allatvkanaler.se/images/tv-placeholder.png'"
+			:src="base64 && base64.trim().length > 0 ? base64 : 'https://static.allatvkanaler.se/images/tv-placeholder.png'"
 			@click="handleImageClick"
 		/>
 		<div v-show="false">
