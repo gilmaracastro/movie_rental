@@ -1,7 +1,8 @@
 <template>
     <div class="container">
-		<h1 class="display-1">Editar Filme</h1>
+		<h1 class="display-2">Editar Filme</h1>
 		<movie-form
+			:movie="movie"
 			@submit="handleSubmit"
 		/>
     </div>
@@ -10,20 +11,31 @@
 <script>
 
 import MovieForm from './MovieForm';
-
 export default {
 	components: {
 		MovieForm,
 	},
 	
 	data() {
-		return {};
+		return {
+			paramId: null,
+			movie: null,
+		};
+	},
+
+
+	created() {
+		this.paramId = window.location.href.split('/#/')[1];
+		axios.get('/api/show/' + this.paramId).then((response) => {
+			this.movie = {...response.data.movie};
+		});
+
 	},
 	
 	methods: {
 		handleSubmit(form) {
-			axios.put().then(() => {
-				//Com sucesso
+			axios.put('/api/update/' + this.paramId, form).then((response) => {
+				window.location = '/';
 			})
 		}
 	}

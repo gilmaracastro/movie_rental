@@ -1,8 +1,11 @@
 <template>
 	<div>	
-		<navbar @click="goToNew"/>
+		<navbar @click="goToNew" @input="handleInput"/>
 		<div class="container-fluid">
-			<div class="d-inline-block flex-fill" v-for="movie in filteredMovies" :key="movie.id">
+			<div v-if="filteredMovies.length === 0">
+				<h2>Não há filmes para serem exibidos</h2>
+			</div>
+			<div v-else class="d-inline-block flex-fill" v-for="movie in filteredMovies" :key="movie.id">
 				<movie
 					v-bind="movie"
 					@click="goToDetails"
@@ -22,72 +25,27 @@ export default {
 		Navbar,
 		Movie
 	},
+	
 	data() {
 		return {
-			movies: [
-				{
-					id: '1',
-					name: 'Movie 1s',
-					year: 2018,
-					director: 'Diretor',
-					synopsis: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Commodi libero eius excepturi veritatis, incidunt qui nesciunt consequatur consequuntur quibusdam, ipsum ipsa placeat suscipit explicabo sit error recusandae quis deleniti. Magnam!',
-					cover: 'https://vignette.wikia.nocookie.net/phineasferb/images/6/6a/Phineas_e_Ferb_O_Filme_Atrav%C3%A9s_da_2%C2%AA_Dimens%C3%A3o_Capa_do_DVD.png/revision/latest?cb=20110822034027&path-prefix=pt-br',
-				},
-				{
-					id: '1',
-					name: 'Movie 1s',
-					year: 2018,
-					director: 'Diretor',
-					synopsis: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Commodi libero eius excepturi veritatis, incidunt qui nesciunt consequatur consequuntur quibusdam, ipsum ipsa placeat suscipit explicabo sit error recusandae quis deleniti. Magnam!',
-					cover: 'https://vignette.wikia.nocookie.net/phineasferb/images/6/6a/Phineas_e_Ferb_O_Filme_Atrav%C3%A9s_da_2%C2%AA_Dimens%C3%A3o_Capa_do_DVD.png/revision/latest?cb=20110822034027&path-prefix=pt-br',
-				},
-				{
-					id: '1',
-					name: 'Movie 1s',
-					year: 2018,
-					director: 'Diretor',
-					synopsis: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Commodi libero eius excepturi veritatis, incidunt qui nesciunt consequatur consequuntur quibusdam, ipsum ipsa placeat suscipit explicabo sit error recusandae quis deleniti. Magnam!',
-					cover: 'https://vignette.wikia.nocookie.net/phineasferb/images/6/6a/Phineas_e_Ferb_O_Filme_Atrav%C3%A9s_da_2%C2%AA_Dimens%C3%A3o_Capa_do_DVD.png/revision/latest?cb=20110822034027&path-prefix=pt-br',
-				},
-				{
-					id: '1',
-					name: 'Movie 1s',
-					year: 2018,
-					director: 'Diretor',
-					synopsis: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Commodi libero eius excepturi veritatis, incidunt qui nesciunt consequatur consequuntur quibusdam, ipsum ipsa placeat suscipit explicabo sit error recusandae quis deleniti. Magnam!',
-					cover: 'https://vignette.wikia.nocookie.net/phineasferb/images/6/6a/Phineas_e_Ferb_O_Filme_Atrav%C3%A9s_da_2%C2%AA_Dimens%C3%A3o_Capa_do_DVD.png/revision/latest?cb=20110822034027&path-prefix=pt-br',
-				},
-				{
-					id: '1',
-					name: 'Movie 1s',
-					year: 2018,
-					director: 'Diretor',
-					synopsis: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Commodi libero eius excepturi veritatis, incidunt qui nesciunt consequatur consequuntur quibusdam, ipsum ipsa placeat suscipit explicabo sit error recusandae quis deleniti. Magnam!',
-					cover: 'https://vignette.wikia.nocookie.net/phineasferb/images/6/6a/Phineas_e_Ferb_O_Filme_Atrav%C3%A9s_da_2%C2%AA_Dimens%C3%A3o_Capa_do_DVD.png/revision/latest?cb=20110822034027&path-prefix=pt-br',
-				},
-				{
-					id: '1',
-					name: 'Movie 1s',
-					year: 2018,
-					director: 'Diretor',
-					synopsis: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Commodi libero eius excepturi veritatis, incidunt qui nesciunt consequatur consequuntur quibusdam, ipsum ipsa placeat suscipit explicabo sit error recusandae quis deleniti. Magnam!',
-					cover: 'https://vignette.wikia.nocookie.net/phineasferb/images/6/6a/Phineas_e_Ferb_O_Filme_Atrav%C3%A9s_da_2%C2%AA_Dimens%C3%A3o_Capa_do_DVD.png/revision/latest?cb=20110822034027&path-prefix=pt-br',
-				},
-			],
+			movies: [],
 			loading: true,
+			filterValue: '',
 		}
 	},
 
 	computed: {
 		filteredMovies() {
-			return this.movies;
+			return this.movies.filter((item) => {
+				return new RegExp(this.filterValue, 'i').test(item.name);
+			});
+
 		}
 	},
 
 	mounted() {
-		axios.get('', (data) => {
-			this.movies = data.movies;
-			this.filteredMovies = [...this.movies];
+		axios.get('/api/list').then((response) => {
+			this.movies = [...response.data.movies];
 			this.loading = false;
 		});
 	},
@@ -97,6 +55,9 @@ export default {
 		},
 		goToNew(id) {
 			window.location = `/create/`;
+		},
+		handleInput(input) {
+			this.filterValue = input;
 		}
 	},	
 }

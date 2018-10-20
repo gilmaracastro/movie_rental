@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-		<h1 class="display-1">Novo Filme</h1>
+		<h1 class="display-3">Novo Filme</h1>
 		<movie-form
 			@submit="handleSubmit"
 		/>
@@ -16,18 +16,11 @@ export default {
 		MovieForm,
 	},
 	
-	data() {
-		return {};
-	},
-	
 	methods: {
 		handleSubmit(form) {
-			setTimeout(()=> {
+			form.photo = 'image';
+			axios.post('/api/save', form).then((response) => {
 				window.location = '/';
-			}, 1000);
-			return;
-			axios.post('', form).then(() => {
-				//Com sucesso
 			});
 		}
 	}
