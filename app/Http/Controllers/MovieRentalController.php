@@ -19,7 +19,7 @@ class MovieRentalController extends Controller
 
 	public function edit(Request $in)
 	{
-		$movie = Movie::find(Crypt::decrypt($in->id));
+		$movie = Movie::find($in->id);
 
 		return response()->json(['movie' => $movie]);
 	}
