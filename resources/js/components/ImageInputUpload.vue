@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<img
-			class="float-right"
+			class="cover float-right"
 			:src="base64 || 'https://static.allatvkanaler.se/images/tv-placeholder.png'"
 			@click="handleImageClick"
 		/>
@@ -14,6 +14,8 @@
 <script>
 export default {
 	
+	props: ['src'],
+
 	data() {
 		return {
 			base64: null,
@@ -23,6 +25,9 @@ export default {
 	watch: {
 		base64() {
 			this.$emit('base64', this.base64);
+		},
+		src() {
+			this.base64 = this.src;
 		}
 	},
 	
@@ -48,5 +53,8 @@ export default {
 <style scoped>
 	img {
 		cursor: pointer;
+	}
+	.cover {
+		max-width: 250px;
 	}
 </style>
