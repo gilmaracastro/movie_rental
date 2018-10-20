@@ -22,3 +22,4 @@ Route::get('edit/{id}', 'MovieRentalController@edit');
 Route::post('save', 'MovieRentalController@save');
 Route::put('update/{id}', 'MovieRentalController@update');
 Route::delete('delete/{id}', 'MovieRentalController@delete');
+Route::get('show/{id}', 'MovieRentalController@show');
